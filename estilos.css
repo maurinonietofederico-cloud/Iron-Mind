@@ -1,0 +1,449 @@
+/* ==========================================================
+   1. VARIABLES Y BASE: El ADN de Iron Mind
+   ========================================================== */
+:root {
+    --naranja-neon: #FFAC00;
+    --naranja-glow: rgba(255, 172, 0, 0.3);
+    --negro-fondo: #0a0a0a;
+    --gris-tarjeta: #1a1a1a;
+    --gris-borde: #333;
+    --blanco-humo: #e0e0e0;
+    --rojo-danger: #ff4444;
+    --cyan-gym: #03dac6;
+    --fuente-titulo: 'Oswald', sans-serif;
+    --fuente-texto: 'Roboto', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--fuente-texto);
+    background-color: var(--negro-fondo);
+    color: var(--blanco-humo);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ==========================================================
+   2. HEADER
+   ========================================================== */
+header {
+    background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
+                url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1000') center/cover;
+    padding: 60px 20px;
+    text-align: center;
+    border-bottom: 4px solid var(--naranja-neon);
+}
+
+header h1 {
+    font-family: var(--fuente-titulo);
+    font-size: 4.5rem;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+
+header h1 span {
+    color: var(--naranja-neon);
+    text-shadow: 0 0 15px var(--naranja-glow);
+}
+
+.slogan {
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #aaa;
+}
+
+/* ==========================================================
+   3. NAVEGACIÓN Y FILTROS (Músculos)
+   ========================================================== */
+.filtros-gym {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.filtros-gym h2 {
+    font-family: var(--fuente-titulo);
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+    color: var(--blanco-humo);
+}
+
+.grid-filtros {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.grid-filtros button {
+    background: transparent;
+    border: 2px solid var(--naranja-neon);
+    color: var(--naranja-neon);
+    padding: 12px 30px;
+    font-family: var(--fuente-titulo);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.grid-filtros button:hover, .grid-filtros button.activo {
+    background: var(--naranja-neon);
+    color: #000;
+    box-shadow: 0 0 20px var(--naranja-glow);
+    transform: translateY(-3px);
+}
+
+/* ==========================================================
+   4. LAYOUT PRINCIPAL
+   ========================================================== */
+.contenedor-principal {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 30px;
+    max-width: 1450px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+@media (max-width: 1100px) {
+    .contenedor-principal {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================
+   5. BIBLIOTECA DE EJERCICIOS
+   ========================================================== */
+#biblioteca-ejercicios h2 {
+    font-family: var(--fuente-titulo);
+    color: var(--naranja-neon);
+    margin-bottom: 20px;
+}
+
+.ejercicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.card-ejercicio {
+    background: var(--gris-tarjeta);
+    border-radius: 12px;
+    padding: 25px;
+    border-left: 5px solid var(--naranja-neon);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-ejercicio:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.card-ejercicio h3 {
+    font-family: var(--fuente-titulo);
+    font-size: 1.8rem;
+    color: var(--naranja-neon);
+    margin-bottom: 10px;
+}
+
+.card-ejercicio .meta {
+    font-size: 0.9rem;
+    color: var(--cyan-gym);
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.btn-add-plan {
+    width: 100%;
+    background: #252525;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 12px;
+    margin-top: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 6px;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn-add-plan:hover {
+    background: var(--naranja-neon);
+    color: #000;
+}
+
+/* ==========================================================
+   6. CALCULADORA NUTRICIONAL
+   ========================================================== */
+.seccion-herramientas {
+    grid-column: 1 / -1;
+    background: var(--gris-tarjeta);
+    padding: 40px;
+    border-radius: 15px;
+    border: 1px solid var(--gris-borde);
+    margin-bottom: 30px;
+}
+
+.seccion-herramientas h2 {
+    font-family: var(--fuente-titulo);
+    color: var(--naranja-neon);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.calculadora-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.input-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-box.full { grid-column: 1 / -1; }
+
+.input-box label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.input-box input, .input-box select {
+    background: #000;
+    border: 1px solid #444;
+    padding: 12px;
+    color: #fff;
+    border-radius: 6px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-box input:focus { border-color: var(--naranja-neon); }
+
+.btn-accion {
+    grid-column: 1 / -1;
+    background: var(--naranja-neon);
+    color: #000;
+    border: none;
+    padding: 16px;
+    font-family: var(--fuente-titulo);
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.resultado-box {
+    margin-top: 30px;
+    padding: 25px;
+    background: #000;
+    border: 2px dashed var(--naranja-neon);
+    border-radius: 10px;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.resultado-box span {
+    color: var(--naranja-neon);
+    font-weight: 900;
+    font-size: 1.4rem;
+}
+
+/* ==========================================================
+   7. CRONOGRAMA SEMANAL (Sticky Sidebar)
+   ========================================================== */
+#cronograma {
+    background: #111;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid var(--gris-borde);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+#cronograma h2 {
+    font-family: var(--fuente-titulo);
+    color: var(--naranja-neon);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.dia-box {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #222;
+}
+
+.dia-box h3 {
+    font-family: var(--fuente-titulo);
+    font-size: 1.2rem;
+    color: var(--naranja-neon);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.lista-rutina { list-style: none; }
+
+.item-rutina {
+    background: #1a1a1a;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    border: 1px solid #333;
+}
+
+.btn-borrar {
+    width: 100%;
+    background: transparent;
+    color: var(--rojo-danger);
+    border: 1px solid var(--rojo-danger);
+    padding: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.btn-borrar:hover {
+    background: var(--rojo-danger);
+    color: #fff;
+}
+
+/* ==========================================================
+   8. MODAL
+   ========================================================== */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.modal.oculto { display: none !important; }
+
+.modal-content {
+    background: var(--gris-tarjeta);
+    padding: 40px;
+    border-radius: 15px;
+    border: 2px solid var(--naranja-neon);
+    text-align: center;
+    width: 90%;
+    max-width: 450px;
+}
+
+.modal-content h3 { font-family: var(--fuente-titulo); font-size: 1.8rem; margin-bottom: 15px; }
+
+.modal-botones {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.modal-botones button {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#confirmar-add { background: var(--naranja-neon); color: #000; }
+#cancelar-add { background: #444; color: #fff; }
+
+/* ==========================================================
+   9. FOOTER
+   ========================================================== */
+footer {
+    background-color: #050505;
+    border-top: 2px solid var(--gris-borde);
+    padding: 60px 20px;
+    margin-top: 80px;
+    text-align: center;
+}
+
+.health-tip {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    background: var(--gris-tarjeta);
+    padding: 30px;
+    border-radius: 12px;
+    border-bottom: 4px solid var(--cyan-gym);
+}
+
+.health-tip h3 {
+    font-family: var(--fuente-titulo);
+    color: var(--cyan-gym);
+    margin-bottom: 10px;
+}
+
+#consejo-texto { font-style: italic; color: #ccc; }
+
+.footer-bottom { font-size: 0.85rem; color: #666; }
+
+/* ==========================================================
+   10. UTILIDADES
+   ========================================================== */
+.oculto { display: none; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ejercicio-img-container {
+    width: 100%;
+    height: 200px;
+    background-color: #000;
+    margin: 10px 0;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ejercicio-img-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Esto evita que el GIF se deforme */
+}
+
+.seguridad-alerta {
+    color: #ff4444;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    background: rgba(255, 68, 68, 0.1);
+    padding: 5px;
+    border-left: 3px solid #ff4444;
+}

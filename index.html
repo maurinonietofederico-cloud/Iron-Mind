@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRON MIND | Tu Entrenador Personal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>IRON <span>MIND</span></h1>
+        </div>
+        <p class="slogan">EL DOLOR ES TEMPORAL, EL ORGULLO ES PARA SIEMPRE</p>
+    </header>
+
+    <nav class="filtros-gym">
+        <h2>¿QUÉ VAMOS A ENTRENAR HOY?</h2>
+        <div id="botones-musculos" class="grid-filtros"></div>
+    </nav>
+
+    <main class="contenedor-principal">
+        
+        <section id="biblioteca-ejercicios">
+            <h2 id="titulo-categoria">Selecciona un grupo muscular</h2>
+            <div id="grid-ejercicios" class="ejercicios-grid"></div>
+        </section>
+
+        <section id="calculadora-nutricional" class="seccion-herramientas">
+            <h2><i class="fas fa-calculator"></i> CALCULADORA DE CALORÍAS</h2>
+            <div class="calculadora-grid">
+                <div class="input-box">
+                    <label>Peso (kg)</label>
+                    <input type="number" id="peso" placeholder="Ej: 80">
+                </div>
+                <div class="input-box">
+                    <label>Altura (cm)</label>
+                    <input type="number" id="altura" placeholder="Ej: 180">
+                </div>
+                <div class="input-box">
+                    <label>Edad</label>
+                    <input type="number" id="edad" placeholder="Ej: 25">
+                </div>
+                <div class="input-box">
+                    <label>Género</label>
+                    <select id="genero">
+                        <option value="hombre">Hombre</option>
+                        <option value="mujer">Mujer</option>
+                    </select>
+                </div>
+                <div class="input-box full">
+                    <label>Nivel de Actividad Física</label>
+                    <select id="actividad">
+                        <option value="1.2">Sedentario (Poco o nada)</option>
+                        <option value="1.375">Ligero (1-3 días)</option>
+                        <option value="1.55">Moderado (3-5 días)</option>
+                        <option value="1.725">Fuerte (6-7 días)</option>
+                        <option value="1.9">Atleta profesional</option>
+                    </select>
+                </div>
+                <button id="btn-calcular-calorias" class="btn-accion">CALCULAR METABOLISMO</button>
+            </div>
+            <div id="resultado-calorias" class="resultado-box oculto"></div>
+        </section>
+
+        <section id="cronograma">
+            <h2>TU PLAN SEMANAL</h2>
+            <div class="semana-grid">
+                <div class="dia-box" data-dia="lunes"><h3>Lunes</h3><ul class="lista-rutina"></ul></div>
+                <div class="dia-box" data-dia="martes"><h3>Martes</h3><ul class="lista-rutina"></ul></div>
+                <div class="dia-box" data-dia="miercoles"><h3>Miércoles</h3><ul class="lista-rutina"></ul></div>
+                <div class="dia-box" data-dia="jueves"><h3>Jueves</h3><ul class="lista-rutina"></ul></div>
+                <div class="dia-box" data-dia="viernes"><h3>Viernes</h3><ul class="lista-rutina"></ul></div>
+                <div class="dia-box" data-dia="sabado"><h3>Sábado</h3><ul class="lista-rutina"></ul></div>
+                <div class="dia-box" data-dia="domingo"><h3>Domingo</h3><ul class="lista-rutina"></ul></div>
+            </div>
+            <button id="btn-reset" class="btn-borrar">BORRAR SEMANA</button>
+        </section>
+    </main>
+
+    <div id="modal-planner" class="modal oculto">
+        <div class="modal-content">
+            <h3>Añadir a la semana</h3>
+            <p id="ejercicio-seleccionado-nombre"></p>
+            <select id="select-dia">
+                <option value="lunes">Lunes</option>
+                <option value="martes">Martes</option>
+                <option value="miercoles">Miércoles</option>
+                <option value="jueves">Jueves</option>
+                <option value="viernes">Viernes</option>
+                <option value="sabado">Sábado</option>
+                <option value="domingo">Domingo</option>
+            </select>
+            <div class="modal-botones">
+                <button id="confirmar-add">AÑADIR</button>
+                <button id="cancelar-add">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="health-tip">
+                <h3>CONSEJO DE SALUD DEL DÍA</h3>
+                <p id="consejo-texto">Cargando recomendación...</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 IRON MIND - Disciplina y Salud</p>
+        </div>
+    </footer>
+
+    <script src="Js.js"></script>
+</body>
+</html>
