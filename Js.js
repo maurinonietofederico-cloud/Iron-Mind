@@ -1,5 +1,5 @@
 /* ==========================================================
-   1. BASE DE DATOS DE EJERCICIOS (60 EJERCICIOS CON GIFS)
+   1. BASE DE DATOS COMPLETA (60 EJERCICIOS)
    ========================================================== */
 const ejerciciosDB = {
     pecho: [
@@ -9,7 +9,7 @@ const ejerciciosDB = {
         { id: 4, nombre: "Cruces Polea", img: "https://fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Crossover.gif", seguridad: "⚠️ CODOS: Siempre semiflexionados.", tecnica: "Contracción máxima en el centro.", musculo: "Pectoral Medio" },
         { id: 5, nombre: "Fondos Pecho", img: "https://fitnessprogramer.com/wp-content/uploads/2021/05/Chest-Dip.gif", seguridad: "⚠️ INCLINACIÓN: Torso adelante.", tecnica: "Baja profundo para activar el pecho.", musculo: "Pectoral Inferior" },
         { id: 6, nombre: "Press Mancuernas", img: "https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Press.gif", seguridad: "⚠️ CONTROL: No choques las pesas arriba.", tecnica: "Mayor rango de movimiento que la barra.", musculo: "Pectoral Mayor" },
-        { id: 7, nombre: "Flexiones Diamante", img: "https://fitnessprogramer.com/wp-content/uploads/2021/02/Diamond-Push-up.gif", seguridad: "⚠️ MUÑECAS: Abre manos si hay molestia.", tecnica: "Manos juntas formando un diamante.", musculo: "Tríceps y Pecho" },
+        { id: 7, nombre: "Flexiones Diamante", img: "https://fitnessprogramer.com/wp-content/uploads/2021/02/Diamond-Push-up.gif", seguridad: "⚠️ MUÑECAS: Abre manos si hay molestia.", tecnica: "Manos juntas bajo el pecho.", musculo: "Tríceps y Pecho" },
         { id: 8, nombre: "Pullover", img: "https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Pullover.gif", seguridad: "⚠️ LUMBAR: No arquees la espalda baja.", tecnica: "Siente el estiramiento del serrato.", musculo: "Serrato y Pecho" },
         { id: 9, nombre: "Peck Deck", img: "https://fitnessprogramer.com/wp-content/uploads/2021/02/Pec-Deck-Fly.gif", seguridad: "⚠️ AJUSTE: Codos alineados al hombro.", tecnica: "Aprieta 1 segundo al cerrar.", musculo: "Pectoral" },
         { id: 10, nombre: "Press Declinado", img: "https://fitnessprogramer.com/wp-content/uploads/2021/02/Decline-Barbell-Bench-Press.gif", seguridad: "⚠️ PRESIÓN: No te quedes mucho tiempo abajo.", tecnica: "Enfoque en el pectoral inferior.", musculo: "Pectoral Inferior" }
@@ -76,9 +76,6 @@ const ejerciciosDB = {
     ]
 };
 
-/* ==========================================================
-   2. RECOMENDACIONES DE SALUD
-   ========================================================== */
 const recomendacionesSalud = [
     "⚠️ CODERAS: En el Press de Banca, mantén los codos a 45 grados; abrirlos a 90 grados dañará tus rotadores.",
     "⚠️ PESO MUERTO: Cuello alineado con la columna para evitar pinzamientos cervicales.",
@@ -97,28 +94,43 @@ const recomendacionesSalud = [
     "PACIENCIA: Los cambios visuales tardan semanas, no días."
 ];
 
-/* ==========================================================
-   3. LÓGICA DE GESTIÓN (PLAN Y CALCULADORA)
-   ========================================================== */
+// --- VARIABLES GLOBALES ---
 let planSemanal = JSON.parse(localStorage.getItem("miPlanGym")) || {
     lunes: [], martes: [], miercoles: [], jueves: [], viernes: [], sabado: [], domingo: []
 };
-
+// ESTA VARIABLE FALTABA DECLARAR CORRECTAMENTE:
+let misPRs = JSON.parse(localStorage.getItem('ironMind_PRs')) || [];
 let ejercicioTemporal = null;
+let timerInterval;
+let timeLeft = 0;
+const audioBeep = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
 
-// Inicialización al cargar la ventana
+// --- INICIALIZACIÓN ---
 window.onload = () => {
     mostrarConsejoAleatorio();
     generarMenuMusculos();
     actualizarVistaCronograma();
-    inicializarCalculadora();
+    cargarRutinaHoy(); 
+    renderPRs(); // SUPER IMPORTANTE: Cargar los logros al iniciar
+    if (audioBeep) audioBeep.load(); 
 };
 
-function mostrarConsejoAleatorio() {
-    const txt = document.getElementById("consejo-texto");
-    if(txt) {
-        const azar = Math.floor(Math.random() * recomendacionesSalud.length);
-        txt.innerText = recomendacionesSalud[azar];
+/* ==========================================================
+   3. GESTIÓN DE PESTAÑAS Y NAVEGACIÓN
+   ========================================================== */
+function switchTab(tab) {
+    document.getElementById('seccion-entreno').classList.add('oculto');
+    document.getElementById('seccion-nutricion').classList.add('oculto');
+    document.getElementById('tab-entreno-btn').classList.remove('activo');
+    document.getElementById('tab-nutricion-btn').classList.remove('activo');
+
+    if(tab === 'entreno') {
+        document.getElementById('seccion-entreno').classList.remove('oculto');
+        document.getElementById('tab-entreno-btn').classList.add('activo');
+        cargarRutinaHoy();
+    } else {
+        document.getElementById('seccion-nutricion').classList.remove('oculto');
+        document.getElementById('tab-nutricion-btn').classList.add('activo');
     }
 }
 
@@ -141,26 +153,21 @@ function generarMenuMusculos() {
 function mostrarEjercicios(grupo) {
     const grid = document.getElementById("grid-ejercicios");
     const titulo = document.getElementById("titulo-categoria");
-    
     grid.innerHTML = "";
     titulo.innerText = `ENTRENAMIENTO DE ${grupo.toUpperCase()}`;
 
     ejerciciosDB[grupo].forEach(ex => {
         const card = document.createElement("div");
         card.className = "card-ejercicio";
-        
         card.innerHTML = `
             <div class="ejercicio-img-container">
-                <img src="${ex.img}" 
-                     alt="${ex.nombre}" 
-                     loading="lazy"
-                     onerror="this.src='https://via.placeholder.com/400x300/1a1a1a/FFAC00?text=IRON+MIND+PRO'">
+                <img src="${ex.img}" alt="${ex.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300/1a1a1a/FFAC00?text=IRON+MIND+PRO'">
             </div>
             <div class="info-ejer">
                 <div class="meta">${ex.musculo || grupo}</div>
                 <h3>${ex.nombre}</h3>
                 <div class="seguridad-alerta">${ex.seguridad}</div>
-                <p class="tecnica-texto"><strong>Técnica:</strong> ${ex.tecnica}</p>
+                <p><strong>Técnica:</strong> ${ex.tecnica}</p>
                 <button class="btn-add-plan" onclick="abrirModal(${ex.id}, '${grupo}')">
                     <i class="fas fa-plus"></i> AÑADIR AL PLAN
                 </button>
@@ -168,8 +175,78 @@ function mostrarEjercicios(grupo) {
         `;
         grid.appendChild(card);
     });
+}
 
-    document.getElementById("biblioteca-ejercicios").scrollIntoView({ behavior: 'smooth' });
+/* ==========================================================
+   4. TEMPORIZADOR
+   ========================================================== */
+function setTimer(seconds) {
+    clearInterval(timerInterval);
+    timeLeft = seconds;
+    actualizarRelojUI();
+    document.getElementById('start-stop-btn').innerText = "INICIAR";
+}
+
+function actualizarRelojUI() {
+    const mins = Math.floor(timeLeft / 60);
+    const secs = timeLeft % 60;
+    document.getElementById('display-timer').innerText = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+function toggleTimer() {
+    const btn = document.getElementById('start-stop-btn');
+    clearInterval(timerInterval);
+
+    if (btn.innerText === "INICIAR") {
+        if (timeLeft <= 0) return alert("Selecciona un tiempo primero.");
+        btn.innerText = "PAUSA";
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            actualizarRelojUI(); 
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                btn.innerText = "INICIAR";
+                if (audioBeep) {
+                    audioBeep.play().catch(e => console.log("Audio bloqueado"));
+                }
+                if (navigator.vibrate) navigator.vibrate(500);
+                alert("¡TIEMPO AGOTADO! A por la siguiente serie."); 
+            }
+        }, 1000);
+    } else {
+        btn.innerText = "INICIAR";
+    }
+}
+
+function resetTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 0;
+    actualizarRelojUI();
+    document.getElementById('start-stop-btn').innerText = "INICIAR";
+}
+
+/* ==========================================================
+   5. PLAN SEMANAL
+   ========================================================== */
+function cargarRutinaHoy() {
+    const dias = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+    const hoy = dias[new Date().getDay()];
+    const listaUI = document.getElementById('lista-hoy');
+    const ejerciciosHoy = planSemanal[hoy] || [];
+
+    listaUI.innerHTML = "";
+    if(ejerciciosHoy.length === 0) {
+        listaUI.innerHTML = "<li>Hoy toca descanso</li>";
+        return;
+    }
+    ejerciciosHoy.forEach((nombre) => {
+        const li = document.createElement('li');
+        li.className = 'item-hoy';
+        li.innerHTML = `<span>${nombre}</span> <i class="fas fa-check-circle"></i>`;
+        li.onclick = () => li.classList.toggle('hecho');
+        listaUI.appendChild(li);
+    });
 }
 
 function abrirModal(id, grupo) {
@@ -185,21 +262,30 @@ document.getElementById("confirmar-add").onclick = () => {
     planSemanal[dia].push(ejercicioTemporal.nombre);
     localStorage.setItem("miPlanGym", JSON.stringify(planSemanal));
     actualizarVistaCronograma();
+    cargarRutinaHoy();
     document.getElementById("modal-planner").classList.add("oculto");
 };
 
 function actualizarVistaCronograma() {
-    Object.keys(planSemanal).forEach(dia => {
-        const listaUI = document.querySelector(`.dia-box[data-dia="${dia}"] .lista-rutina`);
-        if(listaUI) {
-            listaUI.innerHTML = "";
-            planSemanal[dia].forEach((ejer, index) => {
-                const li = document.createElement("li");
-                li.className = "item-rutina";
-                li.innerHTML = `${ejer} <span onclick="eliminarDelPlan('${dia}', ${index})" style="cursor:pointer; color:#ff4444">❌</span>`;
-                listaUI.appendChild(li);
+    const contenedor = document.getElementById("grid-semanal-completo");
+    if (!contenedor) return;
+    const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+    contenedor.innerHTML = "";
+    dias.forEach(dia => {
+        const columna = document.createElement("div");
+        columna.className = "dia-columna";
+        let htmlEjercicios = `<h4>${dia}</h4><ul class="lista-ejercicios-dia">`;
+        const ejercicios = planSemanal[dia] || [];
+        if (ejercicios.length === 0) {
+            htmlEjercicios += `<li style="color:#555; background:transparent;">Descanso</li>`;
+        } else {
+            ejercicios.forEach((nombre, index) => {
+                htmlEjercicios += `<li>${nombre} <span class="btn-borrar-ejer" onclick="eliminarDelPlan('${dia}', ${index})"><i class="fas fa-times"></i></span></li>`;
             });
         }
+        htmlEjercicios += `</ul>`;
+        columna.innerHTML = htmlEjercicios;
+        contenedor.appendChild(columna);
     });
 }
 
@@ -207,38 +293,92 @@ function eliminarDelPlan(dia, index) {
     planSemanal[dia].splice(index, 1);
     localStorage.setItem("miPlanGym", JSON.stringify(planSemanal));
     actualizarVistaCronograma();
+    cargarRutinaHoy();
 }
 
-document.getElementById("btn-reset").onclick = () => {
-    if(confirm("¿Borrar toda tu semana?")) {
-        planSemanal = { lunes: [], martes: [], miercoles: [], jueves: [], viernes: [], sabado: [], domingo: [] };
-        localStorage.setItem("miPlanGym", JSON.stringify(planSemanal));
-        actualizarVistaCronograma();
-    }
-};
+/* ==========================================================
+   6. NUTRICIÓN Y PRs
+   ========================================================== */
+function calcularNutricion() {
+    const p = parseFloat(document.getElementById("peso").value);
+    const a = parseFloat(document.getElementById("altura").value);
+    const e = parseInt(document.getElementById("edad").value);
+    const act = parseFloat(document.getElementById("actividad").value);
+    const g = document.getElementById("genero").value;
 
-function inicializarCalculadora() {
-    const btn = document.getElementById("btn-calcular-calorias");
-    if(btn) {
-        btn.onclick = () => {
-            const peso = parseFloat(document.getElementById("peso").value);
-            const altura = parseFloat(document.getElementById("altura").value);
-            const edad = parseInt(document.getElementById("edad").value);
-            const genero = document.getElementById("genero").value;
-            const actividad = parseFloat(document.getElementById("actividad").value);
-            
-            if (!peso || !altura || !edad) return alert("Completa todos los campos.");
-            
-            let bmr = (genero === "hombre") ? (10 * peso) + (6.25 * altura) - (5 * edad) + 5 : (10 * peso) + (6.25 * altura) - (5 * edad) - 161;
-            const tdee = Math.round(bmr * actividad);
-            
-            const resBox = document.getElementById("resultado-calorias");
-            resBox.classList.remove("oculto");
-            resBox.innerHTML = `
-                <h3>Tu Gasto Diario: <span>${tdee} kcal</span></h3>
-                <p>Mantenimiento: <strong>${tdee} kcal</strong></p>
-                <p>Déficit: <strong>${Math.round(tdee * 0.85)} kcal</strong></p>
-                <p>Superávit: <strong>${Math.round(tdee * 1.15)} kcal</strong></p>`;
-        };
+    if (!p || !a || !e) return alert("Completa los datos");
+
+    let bmr = (g === "hombre") ? (10 * p) + (6.25 * a) - (5 * e) + 5 : (10 * p) + (6.25 * a) - (5 * e) - 161;
+    const tdee = Math.round(bmr * act);
+    const prot = Math.round((tdee * 0.30) / 4);
+    const carb = Math.round((tdee * 0.45) / 4);
+    const fat = Math.round((tdee * 0.25) / 9);
+
+    const resBox = document.getElementById("resultado-nutricion");
+    resBox.classList.remove("oculto");
+    resBox.innerHTML = `
+        <div id="res-calorias">
+            <h3>Gasto Diario: <span>${tdee} kcal</span></h3>
+            <p>Mantenimiento: <strong>${tdee} kcal</strong> | Déficit: <strong>${Math.round(tdee*0.85)}</strong></p>
+        </div>
+        <div class="macros-grid">
+            <div class="macro-item" style="border-top-color: var(--naranja-neon)"><h4>PROTEÍNA</h4><span>${prot}g</span></div>
+            <div class="macro-item" style="border-top-color: #03dac6"><h4>CARBOS</h4><span>${carb}g</span></div>
+            <div class="macro-item" style="border-top-color: #ff4444"><h4>GRASAS</h4><span>${fat}g</span></div>
+        </div>
+    `;
+}
+
+function guardarPR() {
+    const nombreInput = document.getElementById('pr-ejercicio');
+    const pesoInput = document.getElementById('pr-peso');
+    const nombre = nombreInput.value.trim();
+    const peso = pesoInput.value.trim();
+
+    if (nombre === "" || peso === "") {
+        alert("Introduce el ejercicio y el peso.");
+        return;
+    }
+    misPRs.push({ nombre, peso });
+    localStorage.setItem('ironMind_PRs', JSON.stringify(misPRs));
+    nombreInput.value = "";
+    pesoInput.value = "";
+    renderPRs();
+}
+
+function renderPRs() {
+    const lista = document.getElementById('lista-prs');
+    if (!lista) return;
+    if (misPRs.length === 0) {
+        lista.innerHTML = `<li style="color:#666; font-size:0.8rem; text-align:center;">Sin récords guardados.</li>`;
+        return;
+    }
+    lista.innerHTML = misPRs.map((pr, index) => `
+        <li class="pr-item" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>${pr.nombre}</span>
+            <span style="display: flex; align-items: center;">
+                <b>${pr.peso} kg</b> 
+                <i class="fas fa-trash-alt" 
+                   onclick="borrarPR(${index})" 
+                   style="cursor:pointer; color:#ff4444; margin-left:15px; padding: 10px;">
+                </i>
+            </span>
+        </li>
+    `).join('');
+}
+
+function borrarPR(index) {
+    if (confirm("¿Eliminar este récord?")) {
+        misPRs.splice(index, 1);
+        localStorage.setItem('ironMind_PRs', JSON.stringify(misPRs));
+        renderPRs();
+    }
+}
+
+function mostrarConsejoAleatorio() {
+    const txt = document.getElementById("consejo-texto");
+    if(txt) {
+        const azar = Math.floor(Math.random() * recomendacionesSalud.length);
+        txt.innerText = recomendacionesSalud[azar];
     }
 }

@@ -1,108 +1,131 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IRON MIND | Tu Entrenador Personal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="estilos.css">
-    <meta name="description" content="Iron Mind: Tu entrenador personal y calculadora nutricional avanzada para optimizar tus entrenamientos.">
+
+    <meta name="description"
+        content="Iron Mind: Tu entrenador personal y calculadora nutricional avanzada para optimizar tus entrenamientos.">
     <meta name="keywords" content="gimnasio, fitness, calculadora calorias, ejercicios, rutina semanal">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
 
     <header>
         <div class="logo">
             <h1>IRON <span>MIND</span></h1>
         </div>
-        <p class="slogan">EL DOLOR ES TEMPORAL, EL ORGULLO ES PARA SIEMPRE</p>
+        <nav class="pestañas-nav">
+            <button onclick="switchTab('entreno')" id="tab-entreno-btn" class="tab-btn activo">
+                <i class="fas fa-dumbbell"></i> ENTRENAMIENTO
+            </button>
+            <button onclick="switchTab('nutricion')" id="tab-nutricion-btn" class="tab-btn">
+                <i class="fas fa-apple-alt"></i> NUTRICIÓN
+            </button>
+        </nav>
     </header>
 
-    <nav class="filtros-gym">
-        <h2>¿QUÉ VAMOS A ENTRENAR HOY?</h2>
-        <div id="botones-musculos" class="grid-filtros"></div>
-    </nav>
-
     <main class="contenedor-principal">
-        
-        <section id="biblioteca-ejercicios">
-            <h2 id="titulo-categoria">Selecciona un grupo muscular</h2>
-            <div id="grid-ejercicios" class="ejercicios-grid"></div>
+
+        <section id="seccion-entreno" class="tab-content">
+            <div class="entreno-grid">
+
+                <aside class="sidebar-entreno">
+                    <div class="timer-card">
+                        <h3>TEMPORIZADOR</h3>
+                        <div id="display-timer">00:00</div>
+                        <div class="timer-presets">
+                            <button onclick="setTimer(30)">30s</button>
+                            <button onclick="setTimer(60)">60s</button>
+                            <button onclick="setTimer(90)">90s</button>
+                        </div>
+                        <div class="timer-main-actions">
+                            <button id="start-stop-btn" onclick="toggleTimer()" class="btn-start">INICIAR</button>
+                            <button onclick="resetTimer()" class="btn-reset">RESETEAR</button>
+                        </div>
+                    </div>
+
+                    <div class="hoy-card">
+                        <h3>MI RUTINA DE HOY</h3>
+                        <ul id="lista-hoy" class="check-list">
+                        </ul>
+                    </div>
+
+                    <div class="pr-card">
+                        <h3><i class="fas fa-trophy"></i> MIS RÉCORDS (PR)</h3>
+                        <div class="pr-inputs">
+                            <input type="text" id="pr-ejercicio" placeholder="Ej: Press Banca">
+                            <input type="number" id="pr-peso" placeholder="Kg">
+                            <button onclick="guardarPR()"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <ul id="lista-prs" class="pr-list">
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="contenido-derecho">
+                    <section id="biblioteca-ejercicios" class="biblioteca-section">
+                        <div id="botones-musculos" class="grid-filtros"></div>
+                        <h2 id="titulo-categoria">Selecciona un músculo</h2>
+                        <div id="grid-ejercicios" class="ejercicios-grid"></div>
+                    </section>
+
+                    <div class="semana-completa-container">
+                        <h3><i class="fas fa-calendar-alt"></i> PLANIFICACIÓN SEMANAL</h3>
+                        <div id="grid-semanal-completo" class="grid-semanal">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </section>
 
-        <section id="calculadora-nutricional" class="seccion-herramientas">
-            <h2><i class="fas fa-calculator"></i> CALCULADORA DE CALORÍAS</h2>
-            <div class="calculadora-grid">
-                <div class="input-box">
-                    <label>Peso (kg)</label>
-                    <input type="number" id="peso" placeholder="Ej: 80">
-                </div>
-                <div class="input-box">
-                    <label>Altura (cm)</label>
-                    <input type="number" id="altura" placeholder="Ej: 180">
-                </div>
-                <div class="input-box">
-                    <label>Edad</label>
-                    <input type="number" id="edad" placeholder="Ej: 25">
-                </div>
-                <div class="input-box">
-                    <label>Género</label>
-                    <select id="genero">
-                        <option value="hombre">Hombre</option>
-                        <option value="mujer">Mujer</option>
-                    </select>
-                </div>
-                <div class="input-box full">
-                    <label>Nivel de Actividad Física</label>
-                    <select id="actividad">
-                        <option value="1.2">Sedentario (Poco o nada)</option>
-                        <option value="1.375">Ligero (1-3 días)</option>
-                        <option value="1.55">Moderado (3-5 días)</option>
-                        <option value="1.725">Fuerte (6-7 días)</option>
-                        <option value="1.9">Atleta profesional</option>
-                    </select>
-                </div>
-                <button id="btn-calcular-calorias" class="btn-accion">CALCULAR METABOLISMO</button>
-            </div>
-            <div id="resultado-calorias" class="resultado-box oculto"></div>
-        </section>
+      <section id="seccion-nutricion" class="tab-content oculto">
+    <div class="calculadora-container">
+        <h2>CALCULADORA NUTRICIONAL TDEE</h2>
+        <div class="calc-grid">
+            <div class="input-group"><label>Peso (kg)</label><input type="number" id="peso" placeholder="70"></div>
+            <div class="input-group"><label>Altura (cm)</label><input type="number" id="altura" placeholder="175"></div>
+            <div class="input-group"><label>Edad</label><input type="number" id="edad" placeholder="25"></div>
 
-        <section id="cronograma">
-            <h2>TU PLAN SEMANAL</h2>
-            <div class="semana-grid">
-                <div class="dia-box" data-dia="lunes"><h3>Lunes</h3><ul class="lista-rutina"></ul></div>
-                <div class="dia-box" data-dia="martes"><h3>Martes</h3><ul class="lista-rutina"></ul></div>
-                <div class="dia-box" data-dia="miercoles"><h3>Miércoles</h3><ul class="lista-rutina"></ul></div>
-                <div class="dia-box" data-dia="jueves"><h3>Jueves</h3><ul class="lista-rutina"></ul></div>
-                <div class="dia-box" data-dia="viernes"><h3>Viernes</h3><ul class="lista-rutina"></ul></div>
-                <div class="dia-box" data-dia="sabado"><h3>Sábado</h3><ul class="lista-rutina"></ul></div>
-                <div class="dia-box" data-dia="domingo"><h3>Domingo</h3><ul class="lista-rutina"></ul></div>
+            <div class="input-group">
+                <label>Género</label>
+                <select id="genero">
+                    <option value="hombre">Hombre</option>
+                    <option value="mujer">Mujer</option>
+                </select>
             </div>
-            <button id="btn-reset" class="btn-borrar">BORRAR SEMANA</button>
-        </section>
-    </main>
 
-    <div id="modal-planner" class="modal oculto">
-        <div class="modal-content">
-            <h3>Añadir a la semana</h3>
-            <p id="ejercicio-seleccionado-nombre"></p>
-            <select id="select-dia">
-                <option value="lunes">Lunes</option>
-                <option value="martes">Martes</option>
-                <option value="miercoles">Miércoles</option>
-                <option value="jueves">Jueves</option>
-                <option value="viernes">Viernes</option>
-                <option value="sabado">Sábado</option>
-                <option value="domingo">Domingo</option>
-            </select>
-            <div class="modal-botones">
-                <button id="confirmar-add">AÑADIR</button>
-                <button id="cancelar-add">CANCELAR</button>
+            <div class="input-group full">
+                <label>Actividad Física</label>
+                <select id="actividad">
+                    <option value="1.2">Sedentario (Oficina)</option>
+                    <option value="1.375">Ligero (1-3 días)</option>
+                    <option value="1.55">Moderado (3-5 días)</option>
+                    <option value="1.725">Fuerte (6-7 días)</option>
+                </select>
             </div>
+
+            <button id="btn-calcular-calorias" onclick="calcularNutricion()" class="btn-accion">
+                CALCULAR METABOLISMO
+            </button>
+        </div>
+
+        <div id="resultado-nutricion" class="resultado-box oculto">
+            <div id="res-calorias"></div> <div class="macros-grid" id="macros-display">
+                </div>
         </div>
     </div>
+</section>
+
+    </main>
 
     <footer>
         <div class="footer-content">
@@ -116,6 +139,27 @@
         </div>
     </footer>
 
+    <div id="modal-planner" class="modal oculto">
+        <div class="modal-content">
+            <h3>Añadir a mi semana</h3>
+            <p id="ejercicio-seleccionado-nombre"></p>
+            <select id="select-dia">
+                <option value="lunes">Lunes</option>
+                <option value="martes">Martes</option>
+                <option value="miercoles">Miércoles</option>
+                <option value="jueves">Jueves</option>
+                <option value="viernes">Viernes</option>
+                <option value="sabado">Sábado</option>
+                <option value="domingo">Domingo</option>
+            </select>
+            <div class="modal-btns">
+                <button id="confirmar-add">AÑADIR</button>
+                <button id="cancelar-add">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
     <script src="Js.js"></script>
 </body>
+
 </html>

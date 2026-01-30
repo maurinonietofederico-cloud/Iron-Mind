@@ -3,7 +3,7 @@
    ========================================================== */
 :root {
     --naranja-neon: #FFAC00;
-    --naranja-glow: rgba(255, 172, 0, 0.3);
+    --naranja-glow: rgba(255, 172, 0, 0.4);
     --negro-fondo: #0a0a0a;
     --gris-tarjeta: #1a1a1a;
     --gris-borde: #333;
@@ -29,19 +29,19 @@ body {
 }
 
 /* ==========================================================
-   2. HEADER
+   2. HEADER Y NAVEGACIÓN (Pestañas)
    ========================================================== */
 header {
     background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
                 url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1000') center/cover;
-    padding: 60px 20px;
+    padding: 40px 20px;
     text-align: center;
     border-bottom: 4px solid var(--naranja-neon);
 }
 
 header h1 {
     font-family: var(--fuente-titulo);
-    font-size: 4.5rem;
+    font-size: 3.5rem;
     text-transform: uppercase;
     letter-spacing: 5px;
 }
@@ -51,37 +51,14 @@ header h1 span {
     text-shadow: 0 0 15px var(--naranja-glow);
 }
 
-.slogan {
-    font-size: 1.1rem;
-    font-weight: 300;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #aaa;
-}
-
-/* ==========================================================
-   3. NAVEGACIÓN Y FILTROS (Músculos)
-   ========================================================== */
-.filtros-gym {
-    padding: 40px 20px;
-    text-align: center;
-}
-
-.filtros-gym h2 {
-    font-family: var(--fuente-titulo);
-    margin-bottom: 25px;
-    letter-spacing: 2px;
-    color: var(--blanco-humo);
-}
-
-.grid-filtros {
+.pestañas-nav {
     display: flex;
     justify-content: center;
     gap: 15px;
-    flex-wrap: wrap;
+    margin-top: 25px;
 }
 
-.grid-filtros button {
+.tab-btn {
     background: transparent;
     border: 2px solid var(--naranja-neon);
     color: var(--naranja-neon);
@@ -89,387 +66,448 @@ header h1 span {
     font-family: var(--fuente-titulo);
     font-size: 1.1rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 4px;
+    transition: 0.3s;
     text-transform: uppercase;
+    border-radius: 4px;
 }
 
-.grid-filtros button:hover, .grid-filtros button.activo {
+.tab-btn:hover {
+    background: var(--naranja-glow);
+}
+
+.tab-btn.activo {
     background: var(--naranja-neon);
     color: #000;
     box-shadow: 0 0 20px var(--naranja-glow);
-    transform: translateY(-3px);
 }
 
 /* ==========================================================
-   4. LAYOUT PRINCIPAL
+   3. CONTENEDOR PRINCIPAL Y LAYOUT (Corregido para no amontonar)
    ========================================================== */
 .contenedor-principal {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 30px;
+    display: block; /* Asegura que las secciones ocupen su lugar */
     max-width: 1450px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 40px 20px;
 }
 
-@media (max-width: 1100px) {
-    .contenedor-principal {
-        grid-template-columns: 1fr;
-    }
+.entreno-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr; /* Columna fija para timer, flexible para biblioteca */
+    gap: 40px;
+    align-items: start;
+}
+
+/* Sidebar Pegajoso corregido */
+.sidebar-entreno {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+    max-width: 320px;
+}
+
+/* ==========================================================
+   4. TEMPORIZADOR Y RUTINA DE HOY
+   ========================================================== */
+.timer-card, .hoy-card {
+    background: var(--gris-tarjeta);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid var(--gris-borde);
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.timer-card h3, .hoy-card h3 {
+    font-family: var(--fuente-titulo);
+    color: var(--naranja-neon);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#display-timer {
+    font-size: 4.5rem;
+    font-family: var(--fuente-titulo);
+    color: var(--naranja-neon);
+    text-shadow: 0 0 15px var(--naranja-glow);
+    margin-bottom: 20px;
+}
+
+.timer-presets {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.timer-presets button {
+    background: #000;
+    color: #fff;
+    border: 1px solid var(--gris-borde);
+    padding: 10px;
+    cursor: pointer;
+    font-family: var(--fuente-titulo);
+    transition: 0.3s;
+    
+}
+
+.timer-main-actions {
+    display: flex;
+    gap: 10px;
+
+}
+
+.btn-start { background: var(--naranja-neon); color: #000;  border-radius: 15px; font-weight: bold; flex: 2; padding: 15px; border: none; cursor: pointer; font-family: var(--fuente-titulo); }
+.btn-reset { background: #333; color: #fff; flex: 1; border: none;  border-radius: 15px; cursor: pointer; font-family: var(--fuente-titulo); }
+
+.item-hoy {
+    background: #252525;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+    transition: 0.3s;
+    
+}
+
+.item-hoy.hecho {
+    opacity: 0.4;
+    text-decoration: line-through;
+    border-left-color: #44ff44;
 }
 
 /* ==========================================================
    5. BIBLIOTECA DE EJERCICIOS
    ========================================================== */
-#biblioteca-ejercicios h2 {
-    font-family: var(--fuente-titulo);
-    color: var(--naranja-neon);
-    margin-bottom: 20px;
+.grid-filtros {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
 }
+
+.grid-filtros button {
+    background: transparent;
+    border: 2px solid var(--naranja-neon);
+    color: var(--naranja-neon);
+    padding: 12px 25px;
+    font-family: var(--fuente-titulo);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.grid-filtros button.activo { background: var(--naranja-neon); color: #000; }
 
 .ejercicios-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
+    gap: 30px;
 }
 
 .card-ejercicio {
     background: var(--gris-tarjeta);
-    border-radius: 12px;
+    border-radius: 15px;
     padding: 25px;
     border-left: 5px solid var(--naranja-neon);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.card-ejercicio:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.card-ejercicio h3 {
-    font-family: var(--fuente-titulo);
-    font-size: 1.8rem;
-    color: var(--naranja-neon);
-    margin-bottom: 10px;
-}
-
-.card-ejercicio .meta {
-    font-size: 0.9rem;
-    color: var(--cyan-gym);
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-}
-
-.btn-add-plan {
-    width: 100%;
-    background: #252525;
-    color: #fff;
-    border: 1px solid #444;
-    padding: 12px;
-    margin-top: 15px;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 6px;
-    text-transform: uppercase;
-    transition: 0.3s;
-}
-
-.btn-add-plan:hover {
-    background: var(--naranja-neon);
-    color: #000;
-}
-
-/* ==========================================================
-   6. CALCULADORA NUTRICIONAL
-   ========================================================== */
-.seccion-herramientas {
-    grid-column: 1 / -1;
-    background: var(--gris-tarjeta);
-    padding: 40px;
-    border-radius: 15px;
-    border: 1px solid var(--gris-borde);
-    margin-bottom: 30px;
-}
-
-.seccion-herramientas h2 {
-    font-family: var(--fuente-titulo);
-    color: var(--naranja-neon);
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.calculadora-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.input-box {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.input-box.full { grid-column: 1 / -1; }
-
-.input-box label {
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #888;
-    text-transform: uppercase;
-}
-
-.input-box input, .input-box select {
-    background: #000;
-    border: 1px solid #444;
-    padding: 12px;
-    color: #fff;
-    border-radius: 6px;
-    outline: none;
-    transition: 0.3s;
-}
-
-.input-box input:focus { border-color: var(--naranja-neon); }
-
-.btn-accion {
-    grid-column: 1 / -1;
-    background: var(--naranja-neon);
-    color: #000;
-    border: none;
-    padding: 16px;
-    font-family: var(--fuente-titulo);
-    font-size: 1.3rem;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 6px;
-    margin-top: 10px;
-    text-transform: uppercase;
-}
-
-.resultado-box {
-    margin-top: 30px;
-    padding: 25px;
-    background: #000;
-    border: 2px dashed var(--naranja-neon);
-    border-radius: 10px;
-    text-align: center;
-    animation: fadeIn 0.5s ease;
-}
-
-.resultado-box span {
-    color: var(--naranja-neon);
-    font-weight: 900;
-    font-size: 1.4rem;
-}
-
-/* ==========================================================
-   7. CRONOGRAMA SEMANAL (Sticky Sidebar)
-   ========================================================== */
-#cronograma {
-    background: #111;
-    padding: 30px;
-    border-radius: 15px;
-    border: 1px solid var(--gris-borde);
-    height: fit-content;
-    position: sticky;
-    top: 20px;
-}
-
-#cronograma h2 {
-    font-family: var(--fuente-titulo);
-    color: var(--naranja-neon);
-    margin-bottom: 25px;
-    text-align: center;
-}
-
-.dia-box {
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #222;
-}
-
-.dia-box h3 {
-    font-family: var(--fuente-titulo);
-    font-size: 1.2rem;
-    color: var(--naranja-neon);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-}
-
-.lista-rutina { list-style: none; }
-
-.item-rutina {
-    background: #1a1a1a;
-    padding: 10px;
-    margin: 6px 0;
-    border-radius: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.95rem;
-    border: 1px solid #333;
-}
-
-.btn-borrar {
-    width: 100%;
-    background: transparent;
-    color: var(--rojo-danger);
-    border: 1px solid var(--rojo-danger);
-    padding: 10px;
-    margin-top: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 6px;
-    transition: 0.3s;
-}
-
-.btn-borrar:hover {
-    background: var(--rojo-danger);
-    color: #fff;
-}
-
-/* ==========================================================
-   8. MODAL
-   ========================================================== */
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.92);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-}
-
-.modal.oculto { display: none !important; }
-
-.modal-content {
-    background: var(--gris-tarjeta);
-    padding: 40px;
-    border-radius: 15px;
-    border: 2px solid var(--naranja-neon);
-    text-align: center;
-    width: 90%;
-    max-width: 450px;
-}
-
-.modal-content h3 { font-family: var(--fuente-titulo); font-size: 1.8rem; margin-bottom: 15px; }
-
-.modal-botones {
-    display: flex;
-    gap: 15px;
-    margin-top: 25px;
-}
-
-.modal-botones button {
-    flex: 1;
-    padding: 14px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#confirmar-add { background: var(--naranja-neon); color: #000; }
-#cancelar-add { background: #444; color: #fff; }
-
-/* ==========================================================
-   9. FOOTER
-   ========================================================== */
-footer {
-    background-color: #050505;
-    border-top: 2px solid var(--gris-borde);
-    padding: 60px 20px;
-    margin-top: 80px;
-    text-align: center;
-}
-
-.health-tip {
-    max-width: 800px;
-    margin: 0 auto 30px;
-    background: var(--gris-tarjeta);
-    padding: 30px;
-    border-radius: 12px;
-    border-bottom: 4px solid var(--cyan-gym);
-}
-
-.health-tip h3 {
-    font-family: var(--fuente-titulo);
-    color: var(--cyan-gym);
-    margin-bottom: 10px;
-}
-
-#consejo-texto { font-style: italic; color: #ccc; }
-
-.footer-bottom { font-size: 0.85rem; color: #666; }
-
-/* ==========================================================
-   10. UTILIDADES
-   ========================================================== */
-.oculto { display: none; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 .ejercicio-img-container {
     width: 100%;
-    height: 200px;
-    background-color: #000;
-    margin: 10px 0;
-    border-radius: 6px;
+    height: 220px;
+    background: #000;
+    border-radius: 10px;
     overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.ejercicio-img-container img { width: 100%; height: 100%; object-fit: contain; }
+
+/* ==========================================================
+   6. PLANIFICACIÓN SEMANAL COMPLETA
+   ========================================================== */
+.semana-completa-container {
+    grid-column: 1 / -1; /* Ocupa todo el ancho debajo de la biblioteca */
+    margin-top: 40px;
+    background: var(--gris-tarjeta);
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid var(--gris-borde);
+}
+
+.semana-completa-container h3 {
+    color: var(--naranja-neon);
+    font-family: var(--fuente-titulo);
+    margin-bottom: 25px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.grid-semanal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.dia-columna {
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    min-height: 180px;
+}
+
+.dia-columna h4 {
+    color: var(--naranja-neon);
+    text-transform: uppercase;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--naranja-neon);
+    margin-bottom: 12px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+.lista-ejercicios-dia li {
+    background: #1a1a1a;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 4px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-}
-
-.ejercicio-img-container img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Esto evita que el GIF se deforme */
-}
-
-.seguridad-alerta {
-    color: #ff4444;
     font-size: 0.85rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    background: rgba(255, 68, 68, 0.1);
-    padding: 5px;
-    border-left: 3px solid #ff4444;
 }
-/* AJUSTES PARA MÓVIL */
+
+.btn-borrar-ejer { color: var(--rojo-danger); cursor: pointer; transition: 0.3s; }
+.btn-borrar-ejer:hover { color: #fff; }
+
+/* ==========================================================
+   7. CALCULADORA NUTRICIONAL
+   ========================================================== */
+.calculadora-container {
+    background: var(--gris-tarjeta);
+    padding: 50px;
+    border-radius: 20px;
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+/* ==========================================================
+   CALCULADORA NUTRICIONAL - DISEÑO ORDENADO
+   ========================================================== */
+.calculadora-container {
+    background: var(--gris-tarjeta);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid var(--gris-borde);
+    max-width: 900px; /* Controlamos el ancho para que no se estire de más */
+    margin: 40px auto;
+}
+
+.calc-grid {
+    display: grid;
+    /* Forzamos 3 columnas iguales */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 25px;
+    align-items: end; /* Alinea los inputs por la parte de abajo */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* El grupo de Actividad y el Botón ocuparán 2 columnas para equilibrar */
+.input-group.full {
+    grid-column: span 2;
+}
+
+/* Estilo específico para el botón para que no se deforme */
+.calc-grid .btn-accion {
+    grid-column: span 1; 
+    margin-top: 0; /* Quitamos el margen para que alinee con los inputs */
+    height: 55px; /* Misma altura que los inputs aproximadamente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* RESPONSIVE: En móviles pasamos a 1 sola columna */
 @media (max-width: 768px) {
-    header h1 {
-        font-size: 2.5rem; /* Título más pequeño para que no se corte */
+    .calc-grid {
+        grid-template-columns: 1fr;
     }
-
-    .contenedor-principal {
-        grid-template-columns: 1fr; /* Una sola columna en lugar de dos */
-        padding: 10px;
-    }
-
-    #cronograma {
-        position: static; /* Deja de estar pegado a la derecha y fluye hacia abajo */
-        width: 100%;
-        margin-top: 20px;
-    }
-
-    .grid-filtros {
-        gap: 8px;
-    }
-
-    .grid-filtros button {
-        padding: 8px 15px;
-        font-size: 0.9rem; /* Botones más cómodos para el dedo */
+    .input-group.full, .calc-grid .btn-accion {
+        grid-column: span 1;
     }
 }
+
+.input-group label { font-size: 0.9rem; color: #888; text-transform: uppercase; }
+.input-group input, .input-group select { background: #000; border: 1px solid #444; padding: 15px; color: #fff; border-radius: 8px; }
+
+.btn-accion { background: var(--naranja-neon); color: #000; padding: 18px; font-family: var(--fuente-titulo); font-size: 1.4rem; cursor: pointer; border-radius: 8px; width: 100%; border:none; margin-top:20px; }
+
+.resultado-box { margin-top: 30px; padding: 30px; background: #000; border: 2px dashed var(--naranja-neon); text-align: center; border-radius: 12px; }
+
+/* ==========================================================
+   8. MODAL Y FOOTER
+   ========================================================== */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 10000; padding: 20px; }
+.modal-content { background: var(--gris-tarjeta); padding: 40px; border-radius: 20px; border: 2px solid var(--naranja-neon); max-width: 450px; text-align: center; }
+.modal-btns { display: flex; gap: 15px; margin-top: 20px; }
+.modal-btns button { flex: 1; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; }
+
+footer { background: #050505; padding: 60px 20px; margin-top: 100px; border-top: 2px solid var(--gris-borde); text-align: center; }
+.health-tip { max-width: 800px; margin: 0 auto 40px; background: var(--gris-tarjeta); padding: 35px; border-radius: 15px; border-bottom: 4px solid var(--cyan-gym); }
+
+/* ==========================================================
+   9. UTILIDADES Y RESPONSIVE
+   ========================================================== */
+.oculto { display: none !important; }
+
+@media (max-width: 1100px) {
+    .entreno-grid { grid-template-columns: 1fr; }
+    .sidebar-entreno { position: static; max-width: 100%; }
+}
+
+.macros-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.macro-item {
+    padding: 15px;
+    border-radius: 10px;
+    background: #111;
+    border-top: 3px solid var(--naranja-neon);
+    text-align: center;
+}
+
+.macro-item h4 { font-size: 0.8rem; color: #888; margin-bottom: 5px; }
+.macro-item span { font-size: 1.2rem; font-weight: bold; color: #fff; }
+
+/* ==========================================================
+   DISEÑO DE LOGROS Y RÉCORDS (PR)
+   ========================================================== */
+.pr-card {
+    background: var(--gris-tarjeta);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid var(--gris-borde);
+    margin-top: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.pr-card h3 {
+    font-family: var(--fuente-titulo);
+    color: var(--naranja-neon);
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px var(--naranja-glow);
+}
+
+.pr-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.pr-inputs input {
+    background: #000;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    width: 100%;
+    outline: none;
+    transition: 0.3s;
+}
+
+.pr-inputs input:focus {
+    border-color: var(--naranja-neon);
+}
+
+.pr-inputs button {
+    background: var(--naranja-neon);
+    color: #000;
+    border: none;
+    padding: 0 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.pr-inputs button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--naranja-glow);
+}
+
+/* LISTA DE RÉCORDS */
+.pr-list {
+    list-style: none;
+}
+
+.pr-item {
+    background: #000;
+    border: 1px solid #222;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-right: 4px solid var(--naranja-neon);
+    animation: fadeIn 0.4s ease;
+}
+
+.pr-item span:first-child {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.pr-item b {
+    color: var(--naranja-neon);
+    font-size: 1.2rem;
+    font-family: var(--fuente-titulo);
+}
+
+.btn-borrar-pr {
+    color: var(--rojo-danger);
+    cursor: pointer;
+    margin-left: 15px;
+    transition: 0.3s;
+}
+
+.btn-borrar-pr:hover {
+    transform: scale(1.2);
+}
+
+
+.fa-trash-alt, .fa-times {
+    pointer-events: auto !important; /* Fuerza a que el navegador detecte el clic */
+    transition: transform 0.2s;
+}
+
+.fa-trash-alt:hover, .fa-times:hover {
+    transform: scale(1.3);
+    color: #ff0000;
+}
+
+/* Estilo para los ejercicios del cronograma semanal */
+.btn-borrar-ejer {
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px;
+    margin-left: 10px;
+    color: var(--rojo-danger);
+}
+
