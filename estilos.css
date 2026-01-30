@@ -447,3 +447,29 @@ footer {
     padding: 5px;
     border-left: 3px solid #ff4444;
 }
+/* AJUSTES PARA MÓVIL */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5rem; /* Título más pequeño para que no se corte */
+    }
+
+    .contenedor-principal {
+        grid-template-columns: 1fr; /* Una sola columna en lugar de dos */
+        padding: 10px;
+    }
+
+    #cronograma {
+        position: static; /* Deja de estar pegado a la derecha y fluye hacia abajo */
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .grid-filtros {
+        gap: 8px;
+    }
+
+    .grid-filtros button {
+        padding: 8px 15px;
+        font-size: 0.9rem; /* Botones más cómodos para el dedo */
+    }
+}
